@@ -157,14 +157,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blockName" />
 
-            <ListView
-                android:id="@+id/reviewsList"
-                android:layout_width="373dp"
-                android:layout_height="200dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <TextView
                 android:id="@+id/userReviewsText"
                 android:layout_width="wrap_content"
@@ -174,9 +166,17 @@
                 android:text="User Reviews:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintBottom_toTopOf="@+id/reviewsList"
-                app:layout_constraintStart_toStartOf="@+id/reviewsList"
+                app:layout_constraintStart_toStartOf="@+id/litterText2"
                 app:layout_constraintTop_toBottomOf="@+id/numReviewsText_3"
                 app:layout_constraintVertical_bias="0.904" />
+
+            <ListView
+                android:id="@+id/reviewsList"
+                android:layout_width="373dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/userReviewsText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
