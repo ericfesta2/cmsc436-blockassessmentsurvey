@@ -30,7 +30,6 @@
         android:id="@+id/view5"
         android:layout_width="278dp"
         android:layout_height="93dp"
-        android:layout_marginTop="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +50,6 @@
         android:id="@+id/view4"
         android:layout_width="276dp"
         android:layout_height="99dp"
-        android:layout_marginTop="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,8 +80,8 @@
         android:id="@+id/blockName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6"
-        android:text="<Block Name>"
+        android:layout_marginTop="6dp"
+        android:text="Block Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,8 +120,8 @@
 
     <ListView
         android:id="@+id/reviewsList"
-        android:layout_width="364dp"
-        android:layout_height="234dp"
+        android:layout_width="373dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -132,11 +130,12 @@
         android:id="@+id/userReviewsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="4dp"
         android:text="User Reviews:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toTopOf="@+id/reviewsList"
-        app:layout_constraintStart_toStartOf="@+id/reviewsList" />
+        app:layout_constraintStart_toStartOf="@+id/reviewsList"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar9"
+        app:layout_constraintVertical_bias="0.904" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

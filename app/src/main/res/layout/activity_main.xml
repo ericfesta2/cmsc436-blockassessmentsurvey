@@ -67,12 +67,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Review Current Location!"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView"
-        app:layout_constraintVertical_bias="0.422" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <TextView
         android:id="@+id/milesTextView3"
@@ -87,5 +84,15 @@
         app:layout_constraintStart_toEndOf="@+id/radiusSeek"
         app:layout_constraintTop_toBottomOf="@+id/blockSearch"
         app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/seeReviewsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See Reviews For Current Location!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reviewLocationButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

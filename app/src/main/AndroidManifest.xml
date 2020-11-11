@@ -23,6 +23,13 @@
                 <category android:name="android.intent.category.TYPED_OPENABLE" />
             </intent-filter>
         </activity>
+        <activity android:name=".ViewReviewsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.TYPED_OPENABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
