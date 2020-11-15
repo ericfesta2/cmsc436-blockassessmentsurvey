@@ -37,7 +37,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/mainContentLayout"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/blockName" />
+            <!--<TextView
                 android:id="@+id/airQualityText2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -155,28 +162,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blockName" />
-
-            <!-- <TextView
-                android:id="@+id/userReviewsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="30dp"
-                android:text="User Reviews:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintBottom_toTopOf="@+id/reviewsList"
-                app:layout_constraintStart_toStartOf="@+id/litterText2"
-                app:layout_constraintTop_toBottomOf="@+id/numReviewsText_3"
-                app:layout_constraintVertical_bias="0.904" /> -->
-
-            <!-- <ListView
-                android:id="@+id/reviewsList"
-                android:layout_width="373dp"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/userReviewsText" /> -->
+                app:layout_constraintTop_toBottomOf="@+id/blockName" /> -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
