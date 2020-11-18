@@ -21,13 +21,13 @@ class MainActivity : AppCompatActivity() {
         //val mReviewButton = findViewById<Button>(R.id.reviewLocationButton)
         val mSeeReviewsButton = findViewById<Button>(R.id.seeReviewsButton)
 
-        /*mReviewButton.setOnClickListener() {
+        /*mReviewButton.setOnClickListener {
             val intent = Intent(this, ReviewActivity::class.java)
             //TODO:: Include currently selected block as an extra
             startActivity(intent)
         }*/
 
-        mSeeReviewsButton.setOnClickListener() {
+        mSeeReviewsButton.setOnClickListener {
             val intent = Intent(this, ViewReviewsActivity::class.java)
             //TODO: Include the currently selected block as an extra
             startActivity(intent)

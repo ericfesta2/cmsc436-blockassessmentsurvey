@@ -9,7 +9,7 @@ class CommentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.comments_page)
-        setTitle("Block Name") // TODO: getExtra
+        title = "Comments"
 
         val reviewList = listOf(
                 Review("Eric", "11/11/2020", "Testing!"),

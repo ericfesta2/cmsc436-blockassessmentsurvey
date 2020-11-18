@@ -18,12 +18,12 @@ class ViewReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_review)
-        title = "Block Name" // TODO: getExtra
+        title = "Block Reviews"
 
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener() {
+        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener {
             val newReviewIntent = Intent(this, ReviewActivity::class.java)
 
             newReviewIntent.resolveActivity(packageManager)?.let {
@@ -31,7 +31,7 @@ class ViewReviewsActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener() {
+        findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener {
             val commentsIntent = Intent(this, CommentsActivity::class.java)
             // TODO: putExtra block name
 

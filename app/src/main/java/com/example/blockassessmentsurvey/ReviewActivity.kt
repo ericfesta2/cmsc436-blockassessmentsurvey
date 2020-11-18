@@ -14,6 +14,7 @@ class ReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.review_page)
+        title = "Review Block"
 
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mMainLayout = findViewById(R.id.mainContentLayout)
@@ -28,7 +29,7 @@ class ReviewActivity : AppCompatActivity() {
 
             val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
 
-            ratingBar.setOnRatingBarChangeListener() { rb: RatingBar, fl: Float, b: Boolean ->
+            ratingBar.setOnRatingBarChangeListener { rb: RatingBar, fl: Float, b: Boolean ->
                 if (fl > 0) {
                     mResultsMap[dimension.id] = fl
                 } else {
@@ -39,12 +40,19 @@ class ReviewActivity : AppCompatActivity() {
             mMainLayout.addView(view)
         }
 
-        mSubmitButton.setOnClickListener() {submitReview()}
+        mSubmitButton.setOnClickListener {submitReview()}
     }
 
     private fun submitReview() {
-        // TODO: Change as necessary (add unique ids to RatingBars?) and add Firebase integration
+        if (mResultsMap.isEmpty()) {
+            Toast.makeText(this, "Please rate at least one factor.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // TODO: Push data to Firebase
         println(mResultsMap)
         val comments = findViewById<EditText>(R.id.commentMultiline).text
+        Toast.makeText(this, "Your review has been posted!", Toast.LENGTH_LONG).show()
+        finish()
     }
 }
