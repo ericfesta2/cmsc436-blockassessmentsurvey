@@ -28,8 +28,7 @@ class ViewReviewsActivity : AppCompatActivity() {
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
-
-
+        title = "Block Reviews"
 
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -37,7 +36,7 @@ class ViewReviewsActivity : AppCompatActivity() {
         val mBlockNameText = findViewById<TextView>(R.id.blockName)
         mBlockNameText.text = street
 
-        val path = state + "/" + city + "/" + street
+        val path = "$state/$city/$street"
 
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference(path)
@@ -53,7 +52,7 @@ class ViewReviewsActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener() {
+        findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener {
             val intent = Intent(this, CommentsActivity::class.java)
             // TODO: putExtra block name
             intent.putExtra("State", state)
@@ -84,11 +83,11 @@ class ViewReviewsActivity : AppCompatActivity() {
                         parking = parking.plus(review["parking"] as Long)
                     } catch (e: Exception) {
                         Log.i("View Reviews", e.toString())
-
                     } finally {
 
                     }
                 }
+
                 Log.i("Safety", safety.toString())
                 safety /= reviews1.count()
                 air /= reviews1.count()
@@ -101,12 +100,6 @@ class ViewReviewsActivity : AppCompatActivity() {
 
             }
         })
-
-
-
-
-
-
     }
 
     // TODO: Get rating aggregates from Firebase
@@ -117,23 +110,15 @@ class ViewReviewsActivity : AppCompatActivity() {
             view.findViewById<TextView>(R.id.heading).text = dimension.heading
             view.findViewById<TextView>(R.id.desc).text = dimension.desc
 
-            var stars = 0f
-            if (dimension.id == "d_safety") {
-                stars = safety
-            }
-            if (dimension.id == "d_air_quality") {
-                stars = air
-            }
-            if (dimension.id == "d_cleanliness") {
-                stars = cleanliness
-            }
-            if (dimension.id == "d_parking_spaces") {
-                stars = parking
+            var stars = when (dimension.id) {
+                "d_safety" -> safety
+                "d_air_quality" -> air
+                "d_cleanliness" -> cleanliness
+                "d_parking_spaces" -> parking
+                else -> 0f
             }
 
             view.findViewById<RatingBar>(R.id.ratingBar).rating = stars
-
-
 
             mContentLayout.addView(view)
         }

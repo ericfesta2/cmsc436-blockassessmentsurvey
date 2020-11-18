@@ -13,7 +13,7 @@ val ratingDimensions = listOf(
         ),
         RatingDimension(
                 "Air Quality",
-                "How clean is the air in your block?",
+                "How clean is the air near your block?",
                 "d_air_quality",
                 QuestionType.RATING_BAR
         ),
