@@ -188,8 +188,11 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_gravity="bottom|end"
+            android:backgroundTint="@color/design_default_color_primary"
+            app:borderWidth="0dp"
             android:layout_marginTop="8dp"
             app:srcCompat="@drawable/ic_baseline_add_36"
+            app:tint="@color/white"
             app:layout_anchorGravity="bottom"
             android:contentDescription="Add Review" />
     </LinearLayout>

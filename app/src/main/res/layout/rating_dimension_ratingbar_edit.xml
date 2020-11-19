@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:foregroundTint="@color/design_default_color_primary"
         android:progressTint="@color/design_default_color_primary"
+        android:secondaryProgressTint="@color/design_default_color_primary"
         android:progressBackgroundTint="@color/cardview_shadow_start_color"
         app:layout_constraintStart_toStartOf="@id/heading"
         app:layout_constraintEnd_toEndOf="parent"
