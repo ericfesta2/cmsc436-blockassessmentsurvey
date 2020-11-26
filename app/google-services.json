@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "997280763443",
+    "firebase_url": "https://block-assessment-survey.firebaseio.com",
+    "project_id": "block-assessment-survey",
+    "storage_bucket": "block-assessment-survey.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997280763443:android:ccd925f80bf2c60c405d46",
+        "android_client_info": {
+          "package_name": "com.example.blockassessmentsurvey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997280763443-knfm69tttium236t9fm760fnmsi7dd3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY997jxWmYSLClI5_9tA7SAEYa-0QRO3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997280763443-knfm69tttium236t9fm760fnmsi7dd3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
