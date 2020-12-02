@@ -46,5 +46,6 @@ class ReviewActivity : AppCompatActivity() {
         // TODO: Change as necessary (add unique ids to RatingBars?) and add Firebase integration
         println(mResultsMap)
         val comments = findViewById<EditText>(R.id.commentMultiline).text
+        finish()
     }
 }
