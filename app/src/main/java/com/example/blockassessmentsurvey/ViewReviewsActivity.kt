@@ -38,6 +38,7 @@ class ViewReviewsActivity : AppCompatActivity() {
         }
 
         // TODO: Get rating aggregates from Firebase
+        //how exactly does this work?
         for (dimension in ratingDimensions) {
             val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_view, null)
 

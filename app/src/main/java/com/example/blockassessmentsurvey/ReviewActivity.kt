@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.FirebaseDatabase
+import org.json.JSONObject
 
 class ReviewActivity : AppCompatActivity() {
     private lateinit var mLayoutInflater: LayoutInflater
@@ -50,6 +52,21 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         // TODO: Push data to Firebase
+        //how do I extract the data I need to push?
+        var database = FirebaseDatabase.getInstance();
+        var entries = database.getReference("newEntryLocationName")
+
+        var id = entries.push().key
+
+        val newEntry = JSONObject()
+        newEntry.put("user","username")
+        newEntry.put("aspect1","rating1")
+
+        if (id != null) {
+            entries.child(id).setValue(newEntry)
+        }
+
+
         println(mResultsMap)
         val comments = findViewById<EditText>(R.id.commentMultiline).text
         Toast.makeText(this, "Your review has been posted!", Toast.LENGTH_LONG).show()
