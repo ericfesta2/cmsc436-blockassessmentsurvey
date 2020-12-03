@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Block Assessment Survey</string>
-    <string name="rating_dimension_1">Air Quality</string>
-    <string name="rating_dimension_2">Cleanliness (e.g. absence of litter)</string>
-    <string name="rating_dimension_3">Parking Spaces</string>
-    <string name="api_key">AIzaSyCT2cGpBggM_UiAExYwJUB2LQH-AkwphP4</string>
+    <string name="switch_text_login">Don\'t have an account? Register now ></string>
+    <string name="switch_text_register">Already have an account? Log in ></string>
+    <string name="loc_not_valid">This location is not valid. Please choose another.</string>
+    <string name="loc_not_valid_map">This location is not valid. Please try another one by long-pressing on the map.</string>
+    <string name="loc_not_found">Unable to get your current location. Please choose it manually on the map.</string>
+    <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
+    <string name="map_help_txt">Select your location on the map to review it. Grant this app the ability to obtain your current location, or long-press anywhere to use that as your location.</string>
 </resources>
