@@ -32,11 +32,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         //val mReviewButton = findViewById<Button>(R.id.reviewLocationButton)
         val mSeeReviewsButton = findViewById<Button>(R.id.seeReviewsButton)
 
-        val mapFragment = SupportMapFragment.newInstance()
+        /*val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.map, mapFragment)
-            .commit()
+            .commit()*/
 
 
 
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
 
-        mapFragment.getMapAsync(this)
+        //mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

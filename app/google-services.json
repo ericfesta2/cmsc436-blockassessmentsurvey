@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "677017061564",
+    "project_id": "block-assessment-survey-723ab",
+    "storage_bucket": "block-assessment-survey-723ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677017061564:android:0e13e67771ba69282868b9",
+        "android_client_info": {
+          "package_name": "com.example.blockassessmentsurvey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677017061564-63kpl72v7ckr0at8t8r5sstef0vcbm2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArJfr8_hyp2iV8uq2bN7A20sYKFoAvsgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677017061564-63kpl72v7ckr0at8t8r5sstef0vcbm2n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
