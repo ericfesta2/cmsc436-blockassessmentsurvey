@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
-        mSpinner!!.setAdapter(aa)
+        mSpinner!!.adapter = aa
 
         /*val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager
@@ -57,9 +57,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }*/
 
-        /*if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), apiKey);
-        }*/
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, apiKey);
+        }
 
         //val placesClient = Places.createClient(this)
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         /*autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
 
-        autocompleteFragment!!.setOnPlaceSelectedListener( object : PlaceSelectionListener{
+        autocompleteFragment.setOnPlaceSelectedListener( object : PlaceSelectionListener{
             override fun onPlaceSelected(place: Place) {
                 // TODO: Get info about the selected place.
                 Log.i("TAG", "Place: " + place.name + ", " + place.id)

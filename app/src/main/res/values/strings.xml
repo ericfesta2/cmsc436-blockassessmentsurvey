@@ -7,4 +7,8 @@
     <string name="loc_not_found">Unable to get your current location. Please choose it manually on the map.</string>
     <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
     <string name="map_help_txt">Select your location on the map to review it. Grant this app the ability to obtain your current location, or long-press anywhere to use that as your location.</string>
+    <string name="rating_dimension_1">Air Quality</string>
+    <string name="rating_dimension_2">Cleanliness (e.g. absence of litter)</string>
+    <string name="rating_dimension_3">Parking Spaces</string>
+    <string name="api_key">AIzaSyCT2cGpBggM_UiAExYwJUB2LQH-AkwphP4</string>
 </resources>
