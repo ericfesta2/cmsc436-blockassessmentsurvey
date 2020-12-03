@@ -3,6 +3,8 @@ package com.example.blockassessmentsurvey
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.Status
@@ -13,14 +15,22 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
-private lateinit var mMap: GoogleMap
-
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mMap: GoogleMap
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mAuth = FirebaseAuth.getInstance()
+
+        if (mAuth.currentUser == null) {
+            toLoginActivity()
+        }
 
         //val mMap = findViewById<MapView>(R.id.mapView)
         //val mRadius = findViewById<SeekBar>(R.id.radiusSeek)
@@ -105,5 +115,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .position(LatLng(0.0, 0.0))
                 .title("Marker")
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.logout, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out_item -> {
+                mAuth.signOut()
+                toLoginActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun toLoginActivity() {
+        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
+
+        intent.resolveActivity(packageManager)?.let {
+            startActivity(loginIntent)
+        }
     }
 }

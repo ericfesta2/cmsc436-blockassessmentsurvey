@@ -19,7 +19,7 @@ class LoginRegisterActivity : AppCompatActivity() {
     private var isLogin = true
 
     companion object {
-        val USER_ID = "USER_ID"
+        const val USER_ID = "USER_ID"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

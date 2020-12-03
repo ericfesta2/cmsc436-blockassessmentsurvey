@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Half.toFloat
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
@@ -12,8 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import java.lang.Exception
+import com.google.firebase.auth.FirebaseAuth
 
 class ViewReviewsActivity : AppCompatActivity() {
+    private lateinit var mAuth: FirebaseAuth
     private lateinit var mContentLayout: LinearLayout
     private lateinit var mLayoutInflater: LayoutInflater
 
@@ -25,6 +29,13 @@ class ViewReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_review)
+
+        mAuth = FirebaseAuth.getInstance()
+
+        if (mAuth.currentUser == null) {
+            toLoginActivity()
+        }
+
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
@@ -121,6 +132,30 @@ class ViewReviewsActivity : AppCompatActivity() {
             view.findViewById<RatingBar>(R.id.ratingBar).rating = stars
 
             mContentLayout.addView(view)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.logout, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out_item -> {
+                mAuth.signOut()
+                toLoginActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun toLoginActivity() {
+        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
+
+        intent.resolveActivity(packageManager)?.let {
+            startActivity(loginIntent)
         }
     }
 }

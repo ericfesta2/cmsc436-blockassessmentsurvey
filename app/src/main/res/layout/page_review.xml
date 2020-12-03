@@ -20,7 +20,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="Block Name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textAlignment="center"
+                android:padding="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -32,125 +34,6 @@
                 android:orientation="vertical"
                 android:paddingBottom="50dp"
                 app:layout_constraintTop_toBottomOf="@+id/blockName" />
-            <!--<TextView
-                android:id="@+id/airQualityText2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/rating_dimension_1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toEndOf="@+id/view"
-                app:layout_constraintHorizontal_bias="0.107"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toTopOf="@+id/view" />
-
-            <RatingBar
-                android:id="@+id/ratingBar7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                app:layout_constraintBottom_toBottomOf="@+id/view"
-                app:layout_constraintEnd_toEndOf="@+id/view"
-                app:layout_constraintStart_toStartOf="@+id/view" />
-
-            <TextView
-                android:id="@+id/numReviewsText_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 ratings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.044"
-                app:layout_constraintStart_toStartOf="@id/ratingBar7"
-                app:layout_constraintTop_toBottomOf="@+id/ratingBar7" />
-
-            <TextView
-                android:id="@+id/litterText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rating_dimension_2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:layout_marginTop="30dp"
-                app:layout_constraintTop_toBottomOf="@id/numReviewsText_1"
-                app:layout_constraintBottom_toTopOf="@+id/ratingBar8"
-                app:layout_constraintStart_toStartOf="@+id/ratingBar8" />
-
-            <RatingBar
-                android:id="@+id/ratingBar8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                app:layout_constraintTop_toBottomOf="@id/litterText"
-                app:layout_constraintBottom_toBottomOf="@+id/view4"
-                app:layout_constraintEnd_toEndOf="@+id/view4"
-                app:layout_constraintStart_toStartOf="@+id/view4" />
-
-            <TextView
-                android:id="@+id/numReviewsText_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 ratings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.044"
-                app:layout_constraintStart_toStartOf="@id/ratingBar8"
-                app:layout_constraintTop_toBottomOf="@+id/ratingBar8" />
-
-            <View
-                android:id="@+id/view4"
-                android:layout_width="276dp"
-                android:layout_height="99dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <TextView
-                android:id="@+id/litterText2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rating_dimension_3"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@+id/numReviewsText_2"
-                app:layout_constraintBottom_toTopOf="@+id/ratingBar9"
-                app:layout_constraintStart_toStartOf="@+id/ratingBar9" />
-
-            <RatingBar
-                android:id="@+id/ratingBar9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                app:layout_constraintTop_toBottomOf="@id/litterText2"
-                app:layout_constraintEnd_toEndOf="@+id/view5"
-                app:layout_constraintStart_toStartOf="@+id/view5" />
-
-            <TextView
-                android:id="@+id/numReviewsText_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 ratings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.044"
-                app:layout_constraintStart_toStartOf="@id/ratingBar9"
-                app:layout_constraintTop_toBottomOf="@+id/ratingBar9" />
-
-            <View
-                android:id="@+id/view5"
-                android:layout_width="278dp"
-                android:layout_height="93dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="274dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blockName" /> -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
