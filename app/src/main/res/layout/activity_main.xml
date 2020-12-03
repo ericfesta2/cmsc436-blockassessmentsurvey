@@ -9,7 +9,7 @@
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="344dp"
-        android:layout_height="16dp"
+        android:layout_height="32dp"
         android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,27 +109,27 @@
         tools:layout_editor_absoluteY="205dp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextCityName"
         android:layout_width="338dp"
         android:layout_height="52dp"
         android:layout_marginTop="56dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="City Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/editTextStreetName"
         android:layout_width="316dp"
         android:layout_height="59dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Street Name"
         app:layout_constraintBottom_toTopOf="@+id/seeReviewsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextCityName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

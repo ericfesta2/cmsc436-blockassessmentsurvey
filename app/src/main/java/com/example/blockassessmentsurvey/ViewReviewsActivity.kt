@@ -18,7 +18,9 @@ class ViewReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_review)
-        title = "Block Name" // TODO: getExtra
+        val state = intent.getStringExtra("State")
+        val city = intent.getStringExtra("City")
+        val street = intent.getStringExtra("Street")
 
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
