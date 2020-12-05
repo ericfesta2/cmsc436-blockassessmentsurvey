@@ -19,6 +19,8 @@ class CommentsActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
+        // If the user is not logged in, return to the login screen since they must be logged in at this point
+        // Adapted from https://firebase.google.com/docs/auth/android/manage-users#kotlin+ktx
         if (mAuth.currentUser == null) {
             toLoginActivity()
         }

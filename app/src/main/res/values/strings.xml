@@ -1,10 +1,25 @@
 <resources>
     <string name="app_name">Block Assessment Survey</string>
+
+    <!-- LoginRegisterActivity -->
+    <string name="register_heading">Welcome</string>
+    <string name="login_heading">Welcome Back</string>
     <string name="switch_text_login">Don\'t have an account? Register now ></string>
     <string name="switch_text_register">Already have an account? Log in ></string>
+    <string name="register_success">Your account has successfully been registered. Logging you in...</string>
+    <string name="register_failed">Your account was unable to be registered at this time. Please try again or log in if you already have an account.</string>
+    <string name="login_success">You have been logged in successfully.</string>
+    <string name="login_failed">Unable to log in. If you have not created an account, press the Register Now link to create an account.</string>
+    <string name="email_password_req">Please enter both a username and password.</string>
+    <string name="email_not_valid">The email you specified is not valid. Please enter a valid email address.</string>
+
+    <!-- MainActivity -->
+    <string name="loc_success">Location acquired! Press the \"See Reviews for Selected Location\" button to continue.</string>
+    <string name="need_cur_loc">For the best experience, we will need your permission to access your current location. This is optional, and only your street name and city will be stored. Press Ok followed by allowing the permissions to continue.</string>
     <string name="loc_not_valid">This location is not valid. Please choose another.</string>
-    <string name="loc_not_valid_map">This location is not valid. Please try another one by long-pressing on the map.</string>
-    <string name="loc_not_found">Unable to get your current location. Please choose it manually on the map.</string>
+    <string name="loc_us_only">You can only review locations in the United States at the moment.</string>
+    <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>
+    <string name="loc_not_found">Unable to get your current location. Please enter it manually.</string>
     <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
     <string name="map_help_txt">Select your location on the map to review it. Grant this app the ability to obtain your current location, or long-press anywhere to use that as your location.</string>
     <string name="rating_dimension_1">Air Quality</string>

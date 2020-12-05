@@ -5,6 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * This splash screen acts as a loading screen of sorts that hides the interface as the app figures out
+ * which screen should be displayed first based on whether or not the user is logged in.
+ * For instance, if the user is logged in, without this screen the login screen would flash at first,
+ * which is undesirable from a UI perspective.
+ */
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
 
