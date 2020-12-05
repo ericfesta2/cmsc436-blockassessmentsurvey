@@ -57,16 +57,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }*/
 
-        if (!Places.isInitialized()) {
+        /*if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
-        }
+        }*/
 
-        val placesClient = Places.createClient(this)
+        //val placesClient = Places.createClient(this)
 
-        val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
+        /*val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?*/
 
-        autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        /*autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
 
         autocompleteFragment!!.setOnPlaceSelectedListener( object : PlaceSelectionListener{
             override fun onPlaceSelected(place: Place) {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 // TODO: Handle the error.
                 Log.i("TAG", "An error occurred: $status")
             }
-        })
+        })*/
 
 
         mSeeReviewsButton.setOnClickListener() {

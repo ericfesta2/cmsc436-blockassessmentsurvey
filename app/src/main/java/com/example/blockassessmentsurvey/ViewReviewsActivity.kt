@@ -3,13 +3,12 @@ package com.example.blockassessmentsurvey
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class ViewReviewsActivity : AppCompatActivity() {
     private lateinit var mContentLayout: LinearLayout
@@ -25,20 +24,34 @@ class ViewReviewsActivity : AppCompatActivity() {
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener() {
-            val newReviewIntent = Intent(this, ReviewActivity::class.java)
+        val mBlockNameText = findViewById<TextView>(R.id.blockName)
+        mBlockNameText.text = street
 
-            newReviewIntent.resolveActivity(packageManager)?.let {
-                startActivity(newReviewIntent)
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val myRef: DatabaseReference = database.getReference("message")
+
+        myRef.setValue("Hello, World!")
+
+        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener() {
+            val intent = Intent(this, ReviewActivity::class.java)
+            intent.putExtra("State", state)
+            intent.putExtra("City", city)
+            intent.putExtra("Street", street)
+
+            intent.resolveActivity(packageManager)?.let {
+                startActivity(intent)
             }
         }
 
         findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener() {
-            val commentsIntent = Intent(this, CommentsActivity::class.java)
+            val intent = Intent(this, CommentsActivity::class.java)
             // TODO: putExtra block name
+            intent.putExtra("State", state)
+            intent.putExtra("City", city)
+            intent.putExtra("Street", street)
 
-            commentsIntent.resolveActivity(packageManager)?.let {
-                startActivity(commentsIntent)
+            intent.resolveActivity(packageManager)?.let {
+                startActivity(intent)
             }
         }
 

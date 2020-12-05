@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.util.*
+
 
 class ReviewActivity : AppCompatActivity() {
     private lateinit var mLayoutInflater: LayoutInflater
     private lateinit var mMainLayout: LinearLayout
     private lateinit var mSubmitButton: Button
     private lateinit var mResultsMap: MutableMap<String, Float>
+    private lateinit var ref: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +24,21 @@ class ReviewActivity : AppCompatActivity() {
         mMainLayout = findViewById(R.id.mainContentLayout)
         mSubmitButton = findViewById(R.id.submitButton)
         mResultsMap = mutableMapOf()
+
+
+        var mBlockName = findViewById<TextView>(R.id.textView2)
+
+        val state = intent.getStringExtra("State")
+        val city = intent.getStringExtra("City")
+        val street = intent.getStringExtra("Street")
+
+        val path = state + "/" + city + "/" + street
+
+        val database = FirebaseDatabase.getInstance()
+        ref = database.getReference("/test")
+
+        mBlockName.text = street
+
 
         for (dimension in ratingDimensions) {
             val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_edit, null)
@@ -46,6 +66,20 @@ class ReviewActivity : AppCompatActivity() {
         // TODO: Change as necessary (add unique ids to RatingBars?) and add Firebase integration
         println(mResultsMap)
         val comments = findViewById<EditText>(R.id.commentMultiline).text
-        finish()
+        try {
+            val review = Review(
+                "Enter reviewer name",
+                mResultsMap["d_safety"]!!,
+                mResultsMap["d_air_quality"]!!,
+                mResultsMap["d_cleanliness"]!!,
+                mResultsMap["d_parking_spaces"]!!,
+                Date().toString(),
+                comments.toString()
+            )
+            ref.setValue("test review")
+            finish()
+        } catch (e: Error) {
+
+        }
     }
 }
