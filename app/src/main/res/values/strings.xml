@@ -15,7 +15,8 @@
 
     <!-- MainActivity -->
     <string name="loc_success">Location acquired! Press the \"See Reviews for Selected Location\" button to continue.</string>
-    <string name="need_cur_loc">For the best experience, we will need your permission to access your current location. This is optional, and only your street name and city will be stored. Press Ok followed by allowing the permissions to continue.</string>
+    <string name="loc_in_use">Using My Current Location - Press the button below to continue</string>
+    <string name="need_cur_loc">For the best experience, we will need your permission to access your current location. This is optional, used to autofill your street, city, and state for your assessment, and only your street name and city will be stored. Press Ok followed by allowing the permissions to continue.</string>
     <string name="loc_not_valid">This location is not valid. Please choose another.</string>
     <string name="loc_us_only">You can only review locations in the United States at the moment.</string>
     <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>

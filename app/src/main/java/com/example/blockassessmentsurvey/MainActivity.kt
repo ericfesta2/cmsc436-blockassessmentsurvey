@@ -2,13 +2,14 @@ package com.example.blockassessmentsurvey
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,9 +17,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -40,6 +39,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var mLocation: Location? = null
     private lateinit var mGeocoder: Geocoder
+
+    // True when the user has granted the app at least one location permission
     private var hasLocationPermission = false
 
     companion object {
@@ -67,6 +68,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mSeeReviewsButton = findViewById<Button>(R.id.seeReviewsButton)
 
         mUseCurrentLocationButton.setOnClickListener {
+            // When the user presses the "Use My Current Location" link, update the UI with either
+            // their location data (if possible) or a dialog requesting location permissions.
             updateUIWithLocationData()
         }
 
@@ -110,7 +113,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         /*autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
 
-        autocompleteFragment.setOnPlaceSelectedListener( object : PlaceSelectionListener{
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 // TODO: Get info about the selected place.
                 Log.i("TAG", "Place: " + place.name + ", " + place.id)
@@ -124,8 +127,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })*/
 
-
         mSeeReviewsButton.setOnClickListener {
+            // Upon pressing the "See Reviews for Selected Location" button,
+            // send the user-inputted (or autofilled) street, city, and state values to the View Reviews activity,
+            // which will look up that location in Firebase to aggregate existing user reviews for it.
             val street = mStreetName.text.toString()
             val city = mCityName.text.toString()
             val state = mStateSpinner.selectedItem.toString()
@@ -149,6 +154,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
+        // Remove any background location updates when the user is about to leave MainActivity
         mFusedLocationClient.removeLocationUpdates(LocationCallback())
     }
 
@@ -179,13 +185,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         googleMap.addMarker(
-            MarkerOptions()
-                .position(LatLng(0.0, 0.0))
-                .title("Marker")
+                MarkerOptions()
+                        .position(LatLng(0.0, 0.0))
+                        .title("Marker")
         )
     }
 
+    // Menu inflation and item selection methods adapted from https://developer.android.com/guide/topics/ui/menuss
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Add the Log Out button to the top bar.
+        // This same logic is present in almost every other activity as well.
         menuInflater.inflate(R.menu.logout, menu)
         return true
     }
@@ -193,6 +202,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.log_out_item -> {
+                // Log the user out and redirect them to the login page when they press Log Out.
                 mAuth.signOut()
                 toLoginActivity()
                 true
@@ -210,21 +220,58 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun checkPermissions() {
+        // Refreshes whether or not the user has granted the app location permissions.
+        // This may change any time throughout the user's interaction with the app, so this is called in various parts of MainActivity for extra verification
+        // Adapted from Lab 11 - Location and Android Studio autocomplete
         hasLocationPermission = !(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
     }
 
     private fun getCurrentLocation(callback: (() -> Unit)) {
+        // Try to obtain the user's current location so that it can autofill the address fields.
+        checkPermissions()
+
         if (hasLocationPermission) {
             // Adapted from https://developer.android.com/training/location/retrieve-current.html
+            // Android Studio marks the line below as red, as it does not see an explicit permission request around it,
+            // but the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that
             mFusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
                             mLocation = location
                             callback()
                         } else {
-                            Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
-                                    .show()
+                            // The location response could be null due to a variety of reasons, like a new device never having requested the location before.
+                            // If this is the case, the app will submit a location request to force mFusedLocationClient to refresh its location.
+                            // Adapted from https://developer.android.com/training/location/request-updates#kotlin
+                            val locationRequest = LocationRequest.create()
+                            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                            locationRequest.interval = 1000
+                            // One request should be enough to obtain the location; more than that at a repeated interval could be superfluous and battery-draining
+                            locationRequest.numUpdates = 1
+
+                            val locationCallback = object : LocationCallback() {
+                                override fun onLocationResult(locationResult: LocationResult) {
+                                    // Once the FusedLocationProviderClient has received location data upon the app's request,
+                                    // update the UI accordingly if there is non-null location data
+                                    if (locationResult == null) {
+                                        Toast.makeText(this@MainActivity, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
+                                                .show()
+                                    } else {
+                                        for (location in locationResult.locations) {
+                                            if (location != null) {
+                                                mLocation = location
+                                                updateUIWithLocationData()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Begin requesting location updates explicitly based on the above parameters.
+                            // Android Studio marks the line below as red, as it does not see an explicit permission request around it,
+                            // but the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that
+                            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
                         }
                     }
         }
@@ -256,6 +303,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 } else {
                                     // Spinner setSelection adapted from https://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
                                     Toast.makeText(this, getString(R.string.loc_success), Toast.LENGTH_LONG).show()
+                                    mUseCurrentLocationButton.text = getString(R.string.loc_in_use)
+                                    // Italic transformation adapted from https://stackoverflow.com/questions/6200533/how-to-set-textview-textstyle-such-as-bold-italic
+                                    mUseCurrentLocationButton.setTypeface(mUseCurrentLocationButton.typeface, Typeface.ITALIC)
                                     mStateSpinner.setSelection(stateInd)
                                     mStreetName.setText(locItem.thoroughfare)
                                     mCityName.setText(locItem.locality)
@@ -265,6 +315,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG).show()
                         }
                     } catch (e: IOException) {
+                        println(e)
                         Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG).show()
                     }
 
