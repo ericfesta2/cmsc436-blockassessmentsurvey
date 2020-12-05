@@ -119,7 +119,9 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCityName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextCityName"
+        style="@style/Widget.AppCompat.Spinner.Underlined"/>
+    <!-- Spinner underline style from https://stackoverflow.com/questions/26691499/how-to-add-a-line-at-the-bottom-of-spinner-as-like-edittext-in-android/33730833 -->
 
     <TextView
         android:id="@+id/useCurrentLocationBtn"
