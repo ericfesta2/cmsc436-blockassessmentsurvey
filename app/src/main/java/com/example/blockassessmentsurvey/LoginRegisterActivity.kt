@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginRegisterActivity : AppCompatActivity() {
     private lateinit var welcomeHeading: TextView
+    private lateinit var welcomeDesc: TextView
     private lateinit var emailField: EditText
     private lateinit var passField: EditText
     private lateinit var submitButton: Button
@@ -25,6 +26,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         setContentView(R.layout.login_register)
 
         welcomeHeading = findViewById(R.id.welcomeHeading)
+        welcomeDesc = findViewById(R.id.welcomeDesc)
         emailField = findViewById(R.id.editTextTextEmailAddress)
         passField = findViewById(R.id.editTextTextPassword)
         submitButton = findViewById(R.id.submitButton)
@@ -92,10 +94,12 @@ class LoginRegisterActivity : AppCompatActivity() {
 
             if (isLogin) {
                 welcomeHeading.text = getString(R.string.login_heading)
+                welcomeDesc.text = getString(R.string.login_desc)
                 switchLabel.text = getString(R.string.switch_text_login)
                 submitButton.text = "Log In"
             } else {
                 welcomeHeading.text = getString(R.string.register_heading)
+                welcomeDesc.text = getString(R.string.register_desc)
                 switchLabel.text = getString(R.string.switch_text_register)
                 submitButton.text = "Register"
             }

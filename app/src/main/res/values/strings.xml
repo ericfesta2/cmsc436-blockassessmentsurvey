@@ -4,6 +4,8 @@
     <!-- LoginRegisterActivity -->
     <string name="register_heading">Welcome</string>
     <string name="login_heading">Welcome Back</string>
+    <string name="register_desc">Create an account to start rating your places.</string>
+    <string name="login_desc">Log in to continue rating your places.</string>
     <string name="switch_text_login">Don\'t have an account? Register now ></string>
     <string name="switch_text_register">Already have an account? Log in ></string>
     <string name="register_success">Your account has successfully been registered. Logging you in...</string>

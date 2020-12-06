@@ -1,8 +1,9 @@
 package com.example.blockassessmentsurvey
 
+// Rating Dimensions - factors that users can rate and see ratings for
+// ViewReviewsActivity and ReviewActivity pull their content from the ratingDimensions list
 enum class QuestionType {
-    RATING_BAR,
-    MULTI_CHOICE
+    RATING_BAR
 }
 
 val ratingDimensions = listOf(
@@ -17,13 +18,6 @@ val ratingDimensions = listOf(
                 "I have convenient access to a recreational area or park.",
                 "d_open_space",
                 QuestionType.RATING_BAR
-                /*QuestionType.MULTI_CHOICE,
-                listOf(
-                        "Short walk",
-                        "Long walk/run",
-                        "Short car/bike trip",
-                        "Long car/bus ride"
-                )*/
         ),
         RatingDimension(
                 "Air Quality",

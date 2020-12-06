@@ -77,7 +77,8 @@ class ReviewActivity : AppCompatActivity() {
 
             val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
 
-            ratingBar.setOnRatingBarChangeListener { rb: RatingBar, fl: Float, b: Boolean ->
+            // RatingBar docs: https://developer.android.com/reference/android/widget/RatingBar
+            ratingBar.setOnRatingBarChangeListener { _: RatingBar, fl: Float, _: Boolean ->
                 if (fl > 0) {
                     mResultsMap[dimension.id] = fl
                 } else {
@@ -98,7 +99,6 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         // TODO: Push data to Firebase
-        println(mResultsMap)
         val comments = findViewById<EditText>(R.id.commentMultiline).text
 
         try {

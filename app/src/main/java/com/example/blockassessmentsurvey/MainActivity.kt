@@ -63,7 +63,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mStateSpinner = findViewById(R.id.spinner)
         mCityName = findViewById(R.id.editTextCityName)
         mStreetName = findViewById(R.id.editTextStreetName)
+        // FusedLocationProviderClient is similar to LocationService from the labs,
+        // but it automatically combines GPS/network location data
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        // Geocoder enables obtaining street addresses from latitude/longitude (if possible)
         mGeocoder = Geocoder(this)
         val mSeeReviewsButton = findViewById<Button>(R.id.seeReviewsButton)
 
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
-        mStateSpinner!!.adapter = aa
+        mStateSpinner.adapter = aa
 
         /*val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager
@@ -254,16 +257,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 override fun onLocationResult(locationResult: LocationResult) {
                                     // Once the FusedLocationProviderClient has received location data upon the app's request,
                                     // update the UI accordingly if there is non-null location data
-                                    if (locationResult == null) {
+                                    for (altLocation in locationResult.locations) {
+                                        if (altLocation != null) {
+                                            mLocation = altLocation
+                                            updateUIWithLocationData()
+                                        }
+                                    }
+
+                                    if (mLocation == null) {
                                         Toast.makeText(this@MainActivity, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                                                 .show()
-                                    } else {
-                                        for (location in locationResult.locations) {
-                                            if (location != null) {
-                                                mLocation = location
-                                                updateUIWithLocationData()
-                                            }
-                                        }
                                     }
                                 }
                             }
