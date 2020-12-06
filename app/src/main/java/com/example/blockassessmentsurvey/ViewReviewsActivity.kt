@@ -2,11 +2,11 @@ package com.example.blockassessmentsurvey
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Half.toFloat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
@@ -20,11 +20,12 @@ class ViewReviewsActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mContentLayout: LinearLayout
     private lateinit var mLayoutInflater: LayoutInflater
+    private lateinit var mViewIds: MutableMap<String, Pair<Int, Int>>
+    private lateinit var mRatingCounts: MutableMap<String, Pair<Long, Double>>
+    private lateinit var mAddReviewButton: FloatingActionButton
+    private lateinit var mHasReviewedTxt: TextView
 
-    var safety: Float = 0f
-    var air: Float = 0f
-    var cleanliness: Float = 0f
-    var parking: Float = 0f
+    private var hasReviewedBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,10 @@ class ViewReviewsActivity : AppCompatActivity() {
 
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        mViewIds = mutableMapOf()
+        mRatingCounts = mutableMapOf()
+        mHasReviewedTxt = findViewById(R.id.hasReviewedTxt)
+        mAddReviewButton = findViewById(R.id.addReviewButton)
 
         val mBlockNameText = findViewById<TextView>(R.id.blockName)
         mBlockNameText.text = street
@@ -54,7 +59,7 @@ class ViewReviewsActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference(path)
 
-        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener() {
+        findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener {
             val intent = Intent(this, ReviewActivity::class.java)
             intent.putExtra("State", state)
             intent.putExtra("City", city)
@@ -67,7 +72,6 @@ class ViewReviewsActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.viewCommentsBtn).setOnClickListener {
             val intent = Intent(this, CommentsActivity::class.java)
-            // TODO: putExtra block name
             intent.putExtra("State", state)
             intent.putExtra("City", city)
             intent.putExtra("Street", street)
@@ -77,36 +81,109 @@ class ViewReviewsActivity : AppCompatActivity() {
             }
         }
 
+        for (dimension in ratingDimensions) {
+            val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_view, null)
+
+            view.findViewById<TextView>(R.id.heading).text = dimension.heading
+            view.findViewById<TextView>(R.id.desc).text = dimension.desc
+
+            val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+            // Generate unique IDs for each rating bar and rating counter
+            // so they can be updated with the Firebase results in onStart().
+            // View.generateViewId() docs: https://developer.android.com/reference/android/view/View
+            val ratingBarId = View.generateViewId()
+            val counterId = View.generateViewId()
+            mViewIds[dimension.id] = ratingBarId to counterId
+            ratingBar.id = ratingBarId
+            view.findViewById<TextView>(R.id.numReviews).id = counterId
+
+            mContentLayout.addView(view)
+        }
+
+        // Adapted from Lab 7 - Firebase
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                safety = 0f
-                air= 0f
-                cleanliness = 0f
-                parking = 0f
+                mRatingCounts.clear()
+                hasReviewedBlock = false
 
-                Log.i("View Reviews", dataSnapshot.toString())
-                val reviews = dataSnapshot.value as Map<*, Map<String, *>>
-                val reviews1 = reviews.values
-                for (review in reviews1) {
-                    try {
-                        Log.i("View Reviews", review.get("safety").toString())
-                        safety = safety.plus(review["safety"] as Long)
-                        air = air.plus(review["air"] as Long)
-                        cleanliness = cleanliness.plus(review["cleanliness"] as Long)
-                        parking = parking.plus(review["parking"] as Long)
-                    } catch (e: Exception) {
-                        Log.i("View Reviews", e.toString())
-                    } finally {
-
-                    }
+                if (!dataSnapshot.exists()) {
+                    // If there are no reviews, show the Add Review button,
+                    // since the current user has not submitted one for this location either
+                    toggleAddReviewBtn()
                 }
 
-                Log.i("Safety", safety.toString())
-                safety /= reviews1.count()
-                air /= reviews1.count()
-                cleanliness /= reviews1.count()
-                parking /= reviews1.count()
-                getStars()
+                for (postSnapshot in dataSnapshot.children) {
+                    try {
+                        val review = postSnapshot.getValue(Review::class.java)!!
+
+                        for ((k, v) in review.reviews) {
+                            if (mRatingCounts[k] == null) {
+                                mRatingCounts[k] = 1L to v.toDouble()
+                            } else {
+                                mRatingCounts[k] =
+                                    mRatingCounts[k]!!.first + 1 to mRatingCounts[k]!!.second + v
+                            }
+
+                            if (review.reviewer == mAuth.uid) {
+                                hasReviewedBlock = true
+                            }
+                        }
+
+                        for ((k, v) in mRatingCounts) {
+                            if (v.first > 0) {
+                                findViewById<RatingBar>(mViewIds[k]!!.first).rating =
+                                    (v.second / v.first).toFloat()
+                                findViewById<TextView>(mViewIds[k]!!.second).text =
+                                    "${v.first} Rating${if (v.first > 1) "s" else ""}"
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("ViewReviewsActivity", e.toString())
+                    } finally {
+                        toggleAddReviewBtn()
+                    }
+                }
+                /*if (!dataSnapshot.exists()) {
+
+                } else {
+                    safety = 0f
+                    air = 0f
+                    cleanliness = 0f
+                    parking = 0f
+
+                    Log.i("View Reviews", dataSnapshot.toString())
+                    val reviews = dataSnapshot.value as Map<*, Map<String, *>>
+                    val reviews1 = reviews.values
+                    for (review in reviews1) {
+                        try {
+                            Log.i("View Reviews", review["safety"].toString())
+                            safety = safety.plus(review["safety"] as Long)
+                            air = air.plus(review["air"] as Long)
+                            cleanliness = cleanliness.plus(review["cleanliness"] as Long)
+                            parking = parking.plus(review["parking"] as Long)
+                        } catch (e: Exception) {
+                            Log.i("View Reviews", e.toString())
+                        } finally {
+
+                        }
+                    }
+
+                    Log.i("Safety", safety.toString())
+                    safety /= reviews1.count()
+                    air /= reviews1.count()
+                    cleanliness /= reviews1.count()
+                    parking /= reviews1.count()
+
+                    var stars = when (dimension.id) {
+                        "d_safety" -> safety
+                        "d_air_quality" -> air
+                        "d_cleanliness" -> cleanliness
+                        "d_parking_spaces" -> parking
+                        else -> 0f
+                    }
+
+                    view.findViewById<RatingBar>(mViewIds[dimension.id]!!.first).rating = stars
+                }*/
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -115,25 +192,13 @@ class ViewReviewsActivity : AppCompatActivity() {
         })
     }
 
-    // TODO: Get rating aggregates from Firebase
-    fun getStars() {
-        for (dimension in ratingDimensions) {
-            val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_view, null)
-
-            view.findViewById<TextView>(R.id.heading).text = dimension.heading
-            view.findViewById<TextView>(R.id.desc).text = dimension.desc
-
-            var stars = when (dimension.id) {
-                "d_safety" -> safety
-                "d_air_quality" -> air
-                "d_cleanliness" -> cleanliness
-                "d_parking_spaces" -> parking
-                else -> 0f
-            }
-
-            view.findViewById<RatingBar>(R.id.ratingBar).rating = stars
-
-            mContentLayout.addView(view)
+    private fun toggleAddReviewBtn() {
+        if (hasReviewedBlock) {
+            mAddReviewButton.visibility = View.GONE
+            mHasReviewedTxt.text = getString(R.string.has_reviewed)
+        } else {
+            mAddReviewButton.visibility = View.VISIBLE
+            mHasReviewedTxt.text = getString(R.string.has_not_reviewed)
         }
     }
 

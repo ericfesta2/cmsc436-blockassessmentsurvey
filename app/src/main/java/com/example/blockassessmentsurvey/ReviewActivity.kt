@@ -23,7 +23,7 @@ class ReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.review_page)
-        title = "Review Block"
+        title = "New Review"
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -38,13 +38,12 @@ class ReviewActivity : AppCompatActivity() {
         mSubmitButton = findViewById(R.id.submitButton)
         mResultsMap = mutableMapOf()
 
-
-        var mBlockName = findViewById<TextView>(R.id.textView2)
+        var mBlockName = findViewById<TextView>(R.id.blockName)
 
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
-        val userName = "Benny" //TODO: set this to the username once authentication system is setup
+        val userName = mAuth.uid //TODO: set this to the username once authentication system is setup
 
         val path = "$state/$city/$street/$userName"
 
@@ -65,9 +64,7 @@ class ReviewActivity : AppCompatActivity() {
             }}
         )
 
-
         mBlockName.text = street
-
 
         for (dimension in ratingDimensions) {
             val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_edit, null)
@@ -103,14 +100,12 @@ class ReviewActivity : AppCompatActivity() {
 
         try {
             val review = Review(
-                "Enter reviewer name",
-                mResultsMap["d_safety"]!!,
-                mResultsMap["d_air_quality"]!!,
-                mResultsMap["d_cleanliness"]!!,
-                mResultsMap["d_parking_spaces"]!!,
+                mAuth.currentUser!!.uid,
+                mResultsMap,
                 Date().toString(),
                 comments.toString()
             )
+
             ref.setValue(review)
             Toast.makeText(this, "Your review has been posted!", Toast.LENGTH_LONG).show()
             finish()

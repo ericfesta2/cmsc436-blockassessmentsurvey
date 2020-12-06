@@ -24,9 +24,18 @@
     <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>
     <string name="loc_not_found">Unable to get your current location. Please enter it manually.</string>
     <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
-    <string name="map_help_txt">Select your location on the map to review it. Grant this app the ability to obtain your current location, or long-press anywhere to use that as your location.</string>
-    <string name="rating_dimension_1">Air Quality</string>
-    <string name="rating_dimension_2">Cleanliness (e.g. absence of litter)</string>
-    <string name="rating_dimension_3">Parking Spaces</string>
     <string name="api_key">AIzaSyCT2cGpBggM_UiAExYwJUB2LQH-AkwphP4</string>
+
+    <!-- ViewReviewsActivity -->
+    <string name="has_reviewed">You have already reviewed this location.</string>
+    <string name="has_not_reviewed">You have not reviewed this location. Press the \"+\" button below to add a review.</string>
+
+    <!-- ReviewActivity -->
+    <string name="new_review_desc">Rate on a scale of 1 to 5 (1 = strongly disagree, 5 = agree) how you feel about each of the below statements regarding the quality of your block.
+    \n\nYou must rate at least one aspect, but you may leave some blank.
+    \n\nYou may add additional details and comments in the \"Other Comments\" section below the ratings.
+    \n\nOnce you submit your review, you will not be able to change it or review this block again.</string>
+    <string name="comments_fld_heading">Other Comments</string>
+    <string name="comments_fld_hint">Add specific feedback about any of the factors above.</string>
+    <string name="review_submit">Submit Review</string>
 </resources>
