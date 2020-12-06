@@ -1,11 +1,11 @@
 package com.example.blockassessmentsurvey
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.util.*
 
 
@@ -31,11 +31,27 @@ class ReviewActivity : AppCompatActivity() {
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
+        val userName = "Benny" //TODO: set this to the username once authentication system is setup
 
-        val path = state + "/" + city + "/" + street
+        val path = state + "/" + city + "/" + street + "/" + userName
 
         val database = FirebaseDatabase.getInstance()
-        ref = database.getReference("/test")
+        ref = database.getReference(path)
+
+        ref.addValueEventListener( object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                //val value = dataSnapshot.getValue(String.class)
+                Log.i("TAG", "HERE")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }}
+        )
+
 
         mBlockName.text = street
 
@@ -76,10 +92,12 @@ class ReviewActivity : AppCompatActivity() {
                 Date().toString(),
                 comments.toString()
             )
-            ref.setValue("test review")
+            ref.setValue(review)
             finish()
         } catch (e: Error) {
 
         }
+
+
     }
 }
