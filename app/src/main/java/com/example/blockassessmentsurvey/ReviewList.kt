@@ -19,8 +19,11 @@ class ReviewList(private val context: Activity, private var reviews: List<Review
 
         val commentView = listViewItem.findViewById<TextView>(R.id.commentText)
         val postedView = listViewItem.findViewById<TextView>(R.id.timestampText)
-
         val review = reviews[position]
+
+        // Each comment in the ListView has two parts: the comment itself, and when it was posted.
+        // The user's email address/Firebase user ID are not included for anonymity purposes,
+        // though we can still see who posted each comment by looking in the database for their uid.
         commentView.text = review.comments
         postedView.text = review.posted
 
