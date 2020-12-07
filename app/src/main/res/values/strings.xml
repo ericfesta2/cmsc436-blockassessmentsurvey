@@ -8,7 +8,7 @@
     <string name="login_desc">Log in to continue rating your places.</string>
     <string name="switch_text_login">Don\'t have an account? Register now ></string>
     <string name="switch_text_register">Already have an account? Log in ></string>
-    <string name="register_success">Your account has successfully been registered. Logging you in...</string>
+    <string name="register_success">Your account has successfully been registered. Logging you in…</string>
     <string name="register_failed">Your account was unable to be registered at this time. Please try again or log in if you already have an account.</string>
     <string name="login_success">You have been logged in successfully.</string>
     <string name="login_failed">Unable to log in. If you have not created an account, press the Register Now link to create an account.</string>
@@ -29,6 +29,7 @@
     <!-- ViewReviewsActivity -->
     <string name="has_reviewed">You have already reviewed this location.</string>
     <string name="has_not_reviewed">You have not reviewed this location. Press the \"+\" button below to add a review.</string>
+    <string name="review_fetch_failed">Unable to display reviews for this location. Please try again later.</string>
 
     <!-- ReviewActivity -->
     <string name="new_review_desc">Rate on a scale of 1 to 5 (1 = strongly disagree, 5 = agree) how you feel about each of the below statements regarding the quality of your block.

@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
@@ -82,6 +83,8 @@ class ViewReviewsActivity : AppCompatActivity() {
         }
 
         for (dimension in ratingDimensions) {
+            // For each rating dimension in RatingDimensions.kt, create an immutable rating bar
+            // and review counter. They will be populated when the Firebase data is obtained below.
             val view = mLayoutInflater.inflate(R.layout.rating_dimension_ratingbar_view, null)
 
             view.findViewById<TextView>(R.id.heading).text = dimension.heading
@@ -139,55 +142,15 @@ class ViewReviewsActivity : AppCompatActivity() {
                         }
                     } catch (e: Exception) {
                         Log.e("ViewReviewsActivity", e.toString())
+                        Toast.makeText(this@ViewReviewsActivity, getString(R.string.review_fetch_failed), Toast.LENGTH_LONG).show()
                     } finally {
                         toggleAddReviewBtn()
                     }
                 }
-                /*if (!dataSnapshot.exists()) {
-
-                } else {
-                    safety = 0f
-                    air = 0f
-                    cleanliness = 0f
-                    parking = 0f
-
-                    Log.i("View Reviews", dataSnapshot.toString())
-                    val reviews = dataSnapshot.value as Map<*, Map<String, *>>
-                    val reviews1 = reviews.values
-                    for (review in reviews1) {
-                        try {
-                            Log.i("View Reviews", review["safety"].toString())
-                            safety = safety.plus(review["safety"] as Long)
-                            air = air.plus(review["air"] as Long)
-                            cleanliness = cleanliness.plus(review["cleanliness"] as Long)
-                            parking = parking.plus(review["parking"] as Long)
-                        } catch (e: Exception) {
-                            Log.i("View Reviews", e.toString())
-                        } finally {
-
-                        }
-                    }
-
-                    Log.i("Safety", safety.toString())
-                    safety /= reviews1.count()
-                    air /= reviews1.count()
-                    cleanliness /= reviews1.count()
-                    parking /= reviews1.count()
-
-                    var stars = when (dimension.id) {
-                        "d_safety" -> safety
-                        "d_air_quality" -> air
-                        "d_cleanliness" -> cleanliness
-                        "d_parking_spaces" -> parking
-                        else -> 0f
-                    }
-
-                    view.findViewById<RatingBar>(mViewIds[dimension.id]!!.first).rating = stars
-                }*/
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Toast.makeText(this@ViewReviewsActivity, getString(R.string.review_fetch_failed), Toast.LENGTH_LONG).show()
             }
         })
     }

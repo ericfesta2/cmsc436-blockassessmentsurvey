@@ -76,26 +76,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             updateUIWithLocationData()
         }
 
-        //val mMap = findViewById<MapView>(R.id.mapView)
-        //val mRadius = findViewById<SeekBar>(R.id.radiusSeek)
-        //val mSearch = findViewById<SearchView>(R.id.blockSearch)
-        //val milesTextView = findViewById<TextView>(R.id.radiusTextView)
-        //val mReviewButton = findViewById<Button>(R.id.reviewLocationButton)
-
         val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, states)
         // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Set Adapter to Spinner
         mStateSpinner.adapter = aa
-
-        /*val mapFragment = SupportMapFragment.newInstance()
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.map, mapFragment)
-            .commit()*/
-
-
-
 
         val apiKey = getString(R.string.api_key)
 
@@ -105,9 +90,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }*/
 
-        if (!Places.isInitialized()) {
+        /*if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey);
-        }
+        }*/
 
         //val placesClient = Places.createClient(this)
 
@@ -307,6 +292,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                     // Spinner setSelection adapted from https://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
                                     Toast.makeText(this, getString(R.string.loc_success), Toast.LENGTH_LONG).show()
                                     mUseCurrentLocationButton.text = getString(R.string.loc_in_use)
+                                    // Set the location icon to the filled-in one to denote location being used.
+                                    // Source: https://stackoverflow.com/questions/4502605/how-to-programmatically-set-drawableleft-on-android-button
+                                    mUseCurrentLocationButton.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.ic_baseline_location_on_24), null, null, null)
                                     // Italic transformation adapted from https://stackoverflow.com/questions/6200533/how-to-set-textview-textstyle-such-as-bold-italic
                                     mUseCurrentLocationButton.setTypeface(mUseCurrentLocationButton.typeface, Typeface.ITALIC)
                                     mStateSpinner.setSelection(stateInd)
@@ -332,6 +320,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showPermissionDialog() {
+        // This dialog shows when the user presses the "Use My Current Location" button but
+        // has not granted the app location permissions
         AlertDialog.Builder(this)
                 .setTitle("Welcome to Block Assessment Survey")
                 .setMessage(R.string.need_cur_loc)
