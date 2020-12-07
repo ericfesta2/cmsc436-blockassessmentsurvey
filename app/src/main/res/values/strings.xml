@@ -23,12 +23,12 @@
     <string name="loc_us_only">You can only review locations in the United States at the moment.</string>
     <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>
     <string name="loc_not_found">Unable to get your current location. Please enter it manually.</string>
-    <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
 
     <!-- ViewReviewsActivity -->
     <string name="has_reviewed">You have already reviewed this location.</string>
     <string name="has_not_reviewed">You have not reviewed this location. Press the \"+\" button below to add a review.</string>
     <string name="review_fetch_failed">Unable to display reviews for this location. Please try again later.</string>
+    <string name="location_inval">This location is invalid. Please select a valid one.</string>
 
     <!-- ReviewActivity -->
     <string name="new_review_desc">Rate on a scale of 1 to 5 (1 = strongly disagree, 5 = agree) how you feel about each of the below statements regarding the quality of your block.
@@ -38,4 +38,10 @@
     <string name="comments_fld_heading">Other Comments</string>
     <string name="comments_fld_hint">Add specific feedback about any of the factors above.</string>
     <string name="review_submit">Submit Review</string>
+    <string name="review_success">Your review has been posted!</string>
+    <string name="review_error">Unable to post your review. Please try again.</string>
+
+    <!-- CommentsActivity -->
+    <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
+    <string name="comments_fetch_failed">Unable to display comments for this location. Please try again later.</string>
 </resources>

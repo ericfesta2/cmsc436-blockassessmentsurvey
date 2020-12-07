@@ -31,6 +31,7 @@ class ViewReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_review)
+        title = "Reviews"
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -43,7 +44,18 @@ class ViewReviewsActivity : AppCompatActivity() {
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
-        title = "Reviews"
+
+        if (state == null || city == null || street == null) {
+            // If one or more of the extras are null, show an error message and send the user back to MainActivity
+            // to choose a new location
+            Toast.makeText(this, getString(R.string.location_inval), Toast.LENGTH_LONG).show()
+
+            val mainIntent = Intent(this, MainActivity::class.java)
+
+            mainIntent.resolveActivity(packageManager)?.let {
+                startActivity(mainIntent)
+            }
+        }
 
         mContentLayout = findViewById(R.id.mainContentLayout)
         mLayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -91,18 +103,20 @@ class ViewReviewsActivity : AppCompatActivity() {
             view.findViewById<TextView>(R.id.desc).text = dimension.desc
 
             val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+            val reviewCounter = view.findViewById<TextView>(R.id.numReviews)
             // Generate unique IDs for each rating bar and rating counter
-            // so they can be updated with the Firebase results in onStart().
+            // so they can be updated with the Firebase results below.
             // View.generateViewId() docs: https://developer.android.com/reference/android/view/View
             val ratingBarId = View.generateViewId()
             val counterId = View.generateViewId()
             mViewIds[dimension.id] = ratingBarId to counterId
             ratingBar.id = ratingBarId
-            view.findViewById<TextView>(R.id.numReviews).id = counterId
+            reviewCounter.id = counterId
 
             mContentLayout.addView(view)
         }
 
+        // Read the Firebase data from the given location (if any) and update the UI accordingly.
         // Adapted from Lab 7 - Firebase
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

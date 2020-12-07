@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 
 class CommentsActivity : AppCompatActivity() {
@@ -38,6 +38,18 @@ class CommentsActivity : AppCompatActivity() {
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
 
+        if (state == null || city == null || street == null) {
+            // If one or more of the extras are null, show an error message and send the user back to MainActivity
+            // to choose a new location
+            Toast.makeText(this, getString(R.string.location_inval), Toast.LENGTH_LONG).show()
+
+            val mainIntent = Intent(this, MainActivity::class.java)
+
+            mainIntent.resolveActivity(packageManager)?.let {
+                startActivity(mainIntent)
+            }
+        }
+
         val path = "$state/$city/$street"
 
         val database = FirebaseDatabase.getInstance()
@@ -53,33 +65,35 @@ class CommentsActivity : AppCompatActivity() {
                 for (postSnapshot in dataSnapshot.children) {
                     try {
                         val review = postSnapshot.getValue(Review::class.java)!!
-                        reviewList.add(review)
+
+                        if (review.comments.isNotEmpty()) {
+                            reviewList.add(review)
+                        }
+
                         update()
                     } catch (e: Exception) {
                         Log.i("View Comments", e.toString())
-                    } finally {
-
                     }
                 }
 
-                update()
+                if (reviewList.isEmpty()) {
+                    // If there are no comments, display a footer view UI indicating that.
+                    // Adapted from Lab 11 - Location
+                    val noCommentsFooter = layoutInflater.inflate(R.layout.no_comments_footer, mCommentsList, false)
+                    mCommentsList.addFooterView(noCommentsFooter)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Toast.makeText(this@CommentsActivity, getString(R.string.comments_fetch_failed), Toast.LENGTH_LONG).show()
             }
         })
-
     }
 
     private fun update() {
+        // Make reviewList the adapter for the ListView to show the comments.
         val reviewAdapter = ReviewList(this, reviewList)
         findViewById<ListView>(R.id.reviewsList).adapter = reviewAdapter
-
-        if (reviewList.isEmpty()) {
-            val noCommentsFooter = layoutInflater.inflate(R.layout.no_comments_footer, mCommentsList, false)
-            mCommentsList.addFooterView(noCommentsFooter)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -4,28 +4,26 @@
     android:layout_height="match_parent"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:id="@+id/heading"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/desc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@id/heading"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heading"
-        app:layout_constraintHorizontal_bias="0"
         android:paddingRight="10dp"
         android:layout_weight="1"
         android:ellipsize="none"
@@ -36,21 +34,16 @@
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foregroundTint="@color/design_default_color_primary"
-        android:progressBackgroundTint="@color/cardview_shadow_start_color"
         android:isIndicator="true"
         app:layout_constraintStart_toStartOf="@id/heading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/desc"
+        app:layout_constraintTop_toBottomOf="@id/desc"
         app:layout_constraintHorizontal_bias="0" />
 
     <TextView
         android:id="@+id/numReviews"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="0 ratings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="@id/ratingBar"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

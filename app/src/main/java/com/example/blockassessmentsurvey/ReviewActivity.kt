@@ -12,6 +12,9 @@ import com.google.firebase.database.*
 import java.util.*
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * The screen where users create and post reviews.
+ */
 class ReviewActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mLayoutInflater: LayoutInflater
@@ -43,26 +46,24 @@ class ReviewActivity : AppCompatActivity() {
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
-        val userName = mAuth.uid //TODO: set this to the username once authentication system is setup
+        val userName = mAuth.uid
+
+        if (state == null || city == null || street == null) {
+            // If one or more of the extras are null, show an error message and send the user back to MainActivity
+            // to choose a new location
+            Toast.makeText(this, getString(R.string.location_inval), Toast.LENGTH_LONG).show()
+
+            val mainIntent = Intent(this, MainActivity::class.java)
+
+            mainIntent.resolveActivity(packageManager)?.let {
+                startActivity(mainIntent)
+            }
+        }
 
         val path = "$state/$city/$street/$userName"
 
         val database = FirebaseDatabase.getInstance()
         ref = database.getReference(path)
-
-        ref.addValueEventListener( object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                //val value = dataSnapshot.getValue(String.class)
-                Log.i("TAG", "HERE")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }}
-        )
 
         mBlockName.text = street
 
@@ -91,14 +92,16 @@ class ReviewActivity : AppCompatActivity() {
 
     private fun submitReview() {
         if (mResultsMap.isEmpty()) {
+            // Users are allowed to leave some dimensions blank, but they must rate at least one.
             Toast.makeText(this, "Please rate at least one factor.", Toast.LENGTH_LONG).show()
             return
         }
 
-        // TODO: Push data to Firebase
+        // Get the Other Comments. It is fine if this is empty.
         val comments = findViewById<EditText>(R.id.commentMultiline).text
 
         try {
+            // Post the review.
             val review = Review(
                 mAuth.currentUser!!.uid,
                 mResultsMap,
@@ -107,10 +110,10 @@ class ReviewActivity : AppCompatActivity() {
             )
 
             ref.setValue(review)
-            Toast.makeText(this, "Your review has been posted!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.review_success), Toast.LENGTH_LONG).show()
             finish()
         } catch (e: Error) {
-
+            Toast.makeText(this, getString(R.string.review_error), Toast.LENGTH_LONG).show()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.blockassessmentsurvey
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -162,10 +163,18 @@ class MainActivity : AppCompatActivity() {
         // Refreshes whether or not the user has granted the app location permissions.
         // This may change any time throughout the user's interaction with the app, so this is called in various parts of MainActivity for extra verification
         // Adapted from Lab 11 - Location and Android Studio autocomplete
-        hasLocationPermission = !(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        hasLocationPermission = !(
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        )
     }
 
+    /** Android Studio marks mFusedLocationClient.lastLocation and mFusedLocationClient.requestLocationUpdates()
+     *  in red as it does not see a location permission check near them;
+     *  however, the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that,
+     *  so the MissingPermission lint is suppressed to remove the linting error.
+     */
+    @SuppressLint("MissingPermission")
     private fun getCurrentLocation(callback: (() -> Unit)) {
         // Try to obtain the user's current location so that it can autofill the address fields.
         checkPermissions()
@@ -207,8 +216,6 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             // Begin requesting location updates explicitly based on the above parameters.
-                            // Android Studio marks the line below as red, as it does not see an explicit permission request around it,
-                            // but the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that
                             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
                         }
                     }
@@ -286,6 +293,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeToast(context: Context, text: CharSequence, duration: Int) {
+        // Generate and show Toasts as normal, but add their references to a list
+        // so they can be hidden when going to another activity.
         val toast = Toast.makeText(context, text, duration)
         mToasts.add(toast)
         toast.show()

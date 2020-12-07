@@ -6,72 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <fragment android:id="@+id/autocomplete_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <!--<SearchView
-        android:id="@+id/blockSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<SeekBar
-        android:id="@+id/radiusSeek"
-        android:layout_width="274dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blockSearch" />-->
-
-    <!--<TextView
-        android:id="@+id/radiusTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="13dp"
-        android:text="Radius:"
-        app:layout_constraintBottom_toTopOf="@+id/radiusSeek"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blockSearch"
-        app:layout_constraintVertical_bias="0.0" />-->
-
-    <!--<Button
-        android:id="@+id/reviewLocationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Review Location!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map" />-->
-
-    <!--<TextView
-        android:id="@+id/milesTextView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="61dp"
-        android:layout_marginBottom="58dp"
-        android:text="Miles"
-        app:layout_constraintBottom_toTopOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.423"
-        app:layout_constraintStart_toEndOf="@+id/radiusSeek"
-        app:layout_constraintTop_toBottomOf="@+id/blockSearch"
-        app:layout_constraintVertical_bias="1.0" />-->
-
     <TextView
         android:id="@+id/currLocationTextView"
         android:layout_width="wrap_content"
@@ -81,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.056"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autocomplete_fragment" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextStreetName"
@@ -94,7 +28,8 @@
         android:layout_marginRight="12dp"
         app:layout_constraintTop_toBottomOf="@+id/currLocationTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="streetAddress" />
 
     <EditText
         android:id="@+id/editTextCityName"
@@ -108,7 +43,9 @@
         android:hint="City Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStreetName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStreetName"
+        android:autofillHints="addressLocality"/>
+    <!-- autofillHints from https://developer.android.com/guide/topics/text/autofill-optimize -->
 
     <Spinner
         android:id="@+id/spinner"
