@@ -23,6 +23,7 @@ class CommentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.comments_page)
+        title = "Comments"
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -69,12 +70,12 @@ class CommentsActivity : AppCompatActivity() {
                         if (review.comments.isNotEmpty()) {
                             reviewList.add(review)
                         }
-
-                        update()
                     } catch (e: Exception) {
                         Log.i("View Comments", e.toString())
                     }
                 }
+
+                update()
 
                 if (reviewList.isEmpty()) {
                     // If there are no comments, display a footer view UI indicating that.
