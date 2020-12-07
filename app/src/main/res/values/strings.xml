@@ -1,7 +1,42 @@
 <resources>
     <string name="app_name">Block Assessment Survey</string>
-    <string name="rating_dimension_1">Air Quality</string>
-    <string name="rating_dimension_2">Cleanliness (e.g. absence of litter)</string>
-    <string name="rating_dimension_3">Parking Spaces</string>
+
+    <!-- LoginRegisterActivity -->
+    <string name="register_heading">Welcome</string>
+    <string name="login_heading">Welcome Back</string>
+    <string name="register_desc">Create an account to start rating your places.</string>
+    <string name="login_desc">Log in to continue rating your places.</string>
+    <string name="switch_text_login">Don\'t have an account? Register now ></string>
+    <string name="switch_text_register">Already have an account? Log in ></string>
+    <string name="register_success">Your account has successfully been registered. Logging you in…</string>
+    <string name="register_failed">Your account was unable to be registered at this time. Please try again or log in if you already have an account.</string>
+    <string name="login_success">You have been logged in successfully.</string>
+    <string name="login_failed">Unable to log in. If you have not created an account, press the Register Now link to create an account.</string>
+    <string name="email_password_req">Please enter both a username and password.</string>
+    <string name="email_not_valid">The email you specified is not valid. Please enter a valid email address.</string>
+
+    <!-- MainActivity -->
+    <string name="loc_success">Location acquired! Press the \"See Reviews for Selected Location\" button to continue.</string>
+    <string name="loc_in_use">Using My Current Location - Press the button below to continue</string>
+    <string name="need_cur_loc">For the best experience, we will need your permission to access your current location. This is optional, used to autofill your street, city, and state for your assessment, and only your street name and city will be stored. Press Ok followed by allowing the permissions to continue.</string>
+    <string name="loc_not_valid">This location is not valid. Please choose another.</string>
+    <string name="loc_us_only">You can only review locations in the United States at the moment.</string>
+    <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>
+    <string name="loc_not_found">Unable to get your current location. Please enter it manually.</string>
+    <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
     <string name="api_key">AIzaSyCT2cGpBggM_UiAExYwJUB2LQH-AkwphP4</string>
+
+    <!-- ViewReviewsActivity -->
+    <string name="has_reviewed">You have already reviewed this location.</string>
+    <string name="has_not_reviewed">You have not reviewed this location. Press the \"+\" button below to add a review.</string>
+    <string name="review_fetch_failed">Unable to display reviews for this location. Please try again later.</string>
+
+    <!-- ReviewActivity -->
+    <string name="new_review_desc">Rate on a scale of 1 to 5 (1 = strongly disagree, 5 = agree) how you feel about each of the below statements regarding the quality of your block.
+    \n\nYou must rate at least one aspect, but you may leave some blank.
+    \n\nYou may add additional details and comments in the \"Other Comments\" section below the ratings.
+    \n\nOnce you submit your review, you will not be able to change it or review this block again.</string>
+    <string name="comments_fld_heading">Other Comments</string>
+    <string name="comments_fld_hint">Add specific feedback about any of the factors above.</string>
+    <string name="review_submit">Submit Review</string>
 </resources>

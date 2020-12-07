@@ -1,52 +1,68 @@
 package com.example.blockassessmentsurvey
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 
 class CommentsActivity : AppCompatActivity() {
-
-    val reviewList = mutableListOf<Review>()
+    private lateinit var mAuth: FirebaseAuth
+    private val reviewList = mutableListOf<Review>()
+    private lateinit var mCommentsList: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.comments_page)
 
+        mAuth = FirebaseAuth.getInstance()
+
+        // If the user is not logged in, return to the login screen since they must be logged in at this point
+        // Adapted from https://firebase.google.com/docs/auth/android/manage-users#kotlin+ktx
+        if (mAuth.currentUser == null) {
+            toLoginActivity()
+        }
+
+        mCommentsList = findViewById(R.id.reviewsList)
+
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
         val street = intent.getStringExtra("Street")
 
-        val path = state + "/" + city + "/" + street
+        val path = "$state/$city/$street"
 
         val database = FirebaseDatabase.getInstance()
         val ref = database.getReference(path)
 
+        // Adapted from Lab 7 - Firebase
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                reviewList.clear()
 
                 Log.i("View Reviews", dataSnapshot.toString())
-                val reviews = dataSnapshot.value as Map<*, Map<String, *>>
-                val reviews1 = reviews.values
-                for (review in reviews1) {
+
+                for (postSnapshot in dataSnapshot.children) {
                     try {
-                        Log.i("View Comments", review.get("comments").toString())
-                        val r = Review(review["reviewer"] as String, 0f, 0f, 0f, 0f, review["posted"] as String, review["comments"] as String)
-                        reviewList.add(r)
+                        val review = postSnapshot.getValue(Review::class.java)!!
+                        reviewList.add(review)
                         update()
                     } catch (e: Exception) {
                         Log.i("View Comments", e.toString())
-
                     } finally {
 
                     }
                 }
+
+                update()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -56,8 +72,37 @@ class CommentsActivity : AppCompatActivity() {
 
     }
 
-    fun update() {
+    private fun update() {
         val reviewAdapter = ReviewList(this, reviewList)
         findViewById<ListView>(R.id.reviewsList).adapter = reviewAdapter
+
+        if (reviewList.isEmpty()) {
+            val noCommentsFooter = layoutInflater.inflate(R.layout.no_comments_footer, mCommentsList, false)
+            mCommentsList.addFooterView(noCommentsFooter)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.logout, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out_item -> {
+                mAuth.signOut()
+                toLoginActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun toLoginActivity() {
+        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
+
+        intent.resolveActivity(packageManager)?.let {
+            startActivity(loginIntent)
+        }
     }
 }
