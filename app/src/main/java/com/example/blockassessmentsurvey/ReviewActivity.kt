@@ -26,7 +26,7 @@ class ReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.review_page)
-        title = "New Review"
+        title = getString(R.string.review_title)
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -41,7 +41,7 @@ class ReviewActivity : AppCompatActivity() {
         mSubmitButton = findViewById(R.id.submitButton)
         mResultsMap = mutableMapOf()
 
-        var mBlockName = findViewById<TextView>(R.id.blockName)
+        val mBlockName = findViewById<TextView>(R.id.blockName)
 
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
@@ -137,6 +137,10 @@ class ReviewActivity : AppCompatActivity() {
         val loginIntent = Intent(this, LoginRegisterActivity::class.java)
 
         intent.resolveActivity(packageManager)?.let {
+            // Clear the back stack so that logged-out users cannot press the back button
+            // to return to activities that require logging in without first doing so
+            // Adapted from https://stackoverflow.com/questions/46048316/combine-flags-and-clear-back-trace-in-kotlin
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(loginIntent)
         }
     }

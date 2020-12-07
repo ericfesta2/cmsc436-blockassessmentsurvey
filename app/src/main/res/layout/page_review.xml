@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
             <TextView
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:padding="10dp"
         android:clipChildren="false"
         android:clipToPadding="false">
@@ -69,8 +69,8 @@
             android:layout_gravity="top|end"
             android:background="@color/white"
             android:backgroundTint="#FFFFFF"
-            android:contentDescription="View Comments"
-            android:text="View Comments"
+            android:contentDescription="@string/view_comments_hint"
+            android:text="@string/view_comments_hint"
             android:layout_marginBottom="8dp"
             app:backgroundTint="@color/cardview_shadow_start_color"
             app:layout_anchorGravity="top"
@@ -88,7 +88,7 @@
             app:srcCompat="@drawable/ic_baseline_add_36"
             app:tint="@color/white"
             app:layout_anchorGravity="bottom"
-            android:contentDescription="Add Review" />
+            android:contentDescription="@string/add_review_hint" />
     </LinearLayout>
 
     <ProgressBar

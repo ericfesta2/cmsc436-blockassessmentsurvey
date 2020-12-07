@@ -26,7 +26,7 @@ class CommentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.comments_page)
-        title = "Comments"
+        title = getString(R.string.comments_title)
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -129,6 +129,10 @@ class CommentsActivity : AppCompatActivity() {
         val loginIntent = Intent(this, LoginRegisterActivity::class.java)
 
         intent.resolveActivity(packageManager)?.let {
+            // Clear the back stack so that logged-out users cannot press the back button
+            // to return to activities that require logging in without first doing so
+            // Adapted from https://stackoverflow.com/questions/46048316/combine-flags-and-clear-back-trace-in-kotlin
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(loginIntent)
         }
     }

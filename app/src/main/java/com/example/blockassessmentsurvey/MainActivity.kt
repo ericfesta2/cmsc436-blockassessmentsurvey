@@ -136,34 +136,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Menu inflation and item selection methods adapted from https://developer.android.com/guide/topics/ui/menuss
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Add the Log Out button to the top bar.
-        // This same logic is present in almost every other activity as well.
-        menuInflater.inflate(R.menu.logout, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.log_out_item -> {
-                // Log the user out and redirect them to the login page when they press Log Out.
-                mAuth.signOut()
-                toLoginActivity()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun toLoginActivity() {
-        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
-
-        intent.resolveActivity(packageManager)?.let {
-            startActivity(loginIntent)
-        }
-    }
-
     private fun checkPermissions() {
         // Refreshes whether or not the user has granted the app location permissions.
         // This may change any time throughout the user's interaction with the app, so this is called in various parts of MainActivity for extra verification.
@@ -316,5 +288,37 @@ class MainActivity : AppCompatActivity() {
         }
 
         mToasts.clear()
+    }
+
+    // Menu inflation and item selection methods adapted from https://developer.android.com/guide/topics/ui/menuss
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Add the Log Out button to the top bar.
+        // This same logic is present in almost every other activity as well.
+        menuInflater.inflate(R.menu.logout, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out_item -> {
+                // Log the user out and redirect them to the login page when they press Log Out.
+                mAuth.signOut()
+                toLoginActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun toLoginActivity() {
+        val loginIntent = Intent(this, LoginRegisterActivity::class.java)
+
+        intent.resolveActivity(packageManager)?.let {
+            // Clear the back stack so that logged-out users cannot press the back button
+            // to return to activities that require logging in without first doing so
+            // Adapted from https://stackoverflow.com/questions/46048316/combine-flags-and-clear-back-trace-in-kotlin
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(loginIntent)
+        }
     }
 }

@@ -30,17 +30,18 @@ class ViewReviewsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_review)
-        title = "Reviews"
+        title = getString(R.string.view_reviews_title)
 
         mAuth = FirebaseAuth.getInstance()
-        // ProgressBar: https://developer.android.com/reference/android/widget/ProgressBar
-        mProgressBar = findViewById(R.id.progressBar)
 
         // If the user is not logged in, return to the login screen since they must be logged in at this point
         // Adapted from https://firebase.google.com/docs/auth/android/manage-users#kotlin+ktx
         if (mAuth.currentUser == null) {
             toLoginActivity()
         }
+
+        // ProgressBar: https://developer.android.com/reference/android/widget/ProgressBar
+        mProgressBar = findViewById(R.id.progressBar)
 
         val state = intent.getStringExtra("State")
         val city = intent.getStringExtra("City")
@@ -210,6 +211,10 @@ class ViewReviewsActivity : AppCompatActivity() {
         val loginIntent = Intent(this, LoginRegisterActivity::class.java)
 
         intent.resolveActivity(packageManager)?.let {
+            // Clear the back stack so that logged-out users cannot press the back button
+            // to return to activities that require logging in without first doing so
+            // Adapted from https://stackoverflow.com/questions/46048316/combine-flags-and-clear-back-trace-in-kotlin
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(loginIntent)
         }
     }
