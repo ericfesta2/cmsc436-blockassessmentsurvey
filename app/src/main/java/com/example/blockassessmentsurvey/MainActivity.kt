@@ -2,6 +2,7 @@ package com.example.blockassessmentsurvey
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,22 +17,13 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var mMap: GoogleMap
     private lateinit var mUseCurrentLocationButton: TextView
     private lateinit var mStateSpinner: Spinner
     private lateinit var mCityName: EditText
@@ -39,6 +31,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var mLocation: Location? = null
     private lateinit var mGeocoder: Geocoder
+
+    // Keep the references to Toasts so that they can be hidden when leaving the activity
+    private lateinit var mToasts: MutableList<Toast>
 
     // True when the user has granted the app at least one location permission
     private var hasLocationPermission = false
@@ -68,6 +63,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         // Geocoder enables obtaining street addresses from latitude/longitude (if possible)
         mGeocoder = Geocoder(this)
+        mToasts = mutableListOf()
+
         val mSeeReviewsButton = findViewById<Button>(R.id.seeReviewsButton)
 
         mUseCurrentLocationButton.setOnClickListener {
@@ -82,39 +79,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Set Adapter to Spinner
         mStateSpinner.adapter = aa
 
-        val apiKey = getString(R.string.api_key)
-
-        /*mReviewButton.setOnClickListener() {
-            val intent = Intent(this, ReviewActivity::class.java)
-            //TODO:: Include currently selected block as an extra
-            startActivity(intent)
-        }*/
-
-        /*if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, apiKey);
-        }*/
-
-        //val placesClient = Places.createClient(this)
-
-        /*val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?*/
-
-        /*autocompleteFragment!!.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
-                Log.i("TAG", "Place: " + place.name + ", " + place.id)
-                // TODO: Set variable to make this selected place that will get passed as an intent
-
-            }
-
-            override fun onError(status: Status) {
-                // TODO: Handle the error.
-                Log.i("TAG", "An error occurred: $status")
-            }
-        })*/
-
         mSeeReviewsButton.setOnClickListener {
             // Upon pressing the "See Reviews for Selected Location" button,
             // send the user-inputted (or autofilled) street, city, and state values to the View Reviews activity,
@@ -124,7 +88,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val state = mStateSpinner.selectedItem.toString()
 
             if (street.isEmpty() || city.isEmpty() || state.isEmpty()) {
-                Toast.makeText(this, getString(R.string.loc_empty), Toast.LENGTH_LONG).show()
+                makeToast(this, getString(R.string.loc_empty), Toast.LENGTH_LONG)
             } else {
                 val intent = Intent(this, ViewReviewsActivity::class.java)
                 intent.putExtra("State", mStateSpinner.selectedItem.toString())
@@ -136,14 +100,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
-
-        //mapFragment.getMapAsync(this)
     }
 
     override fun onPause() {
         super.onPause()
         // Remove any background location updates when the user is about to leave MainActivity
         mFusedLocationClient.removeLocationUpdates(LocationCallback())
+        cancelToasts()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -165,18 +128,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 updateUIWithLocationData()
             }
         }
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        Log.i("TAG", "SETTING MAP")
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        googleMap.addMarker(
-                MarkerOptions()
-                        .position(LatLng(0.0, 0.0))
-                        .title("Marker")
-        )
     }
 
     // Menu inflation and item selection methods adapted from https://developer.android.com/guide/topics/ui/menuss
@@ -250,8 +201,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                     }
 
                                     if (mLocation == null) {
-                                        Toast.makeText(this@MainActivity, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
-                                                .show()
+                                        makeToast(this@MainActivity, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                                     }
                                 }
                             }
@@ -287,10 +237,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                                 if (stateInd == -1) {
                                     // Currently US locations only
-                                    Toast.makeText(this, getString(R.string.loc_us_only), Toast.LENGTH_LONG).show()
+                                    makeToast(this, getString(R.string.loc_us_only), Toast.LENGTH_LONG)
                                 } else {
                                     // Spinner setSelection adapted from https://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
-                                    Toast.makeText(this, getString(R.string.loc_success), Toast.LENGTH_LONG).show()
+                                    makeToast(this, getString(R.string.loc_success), Toast.LENGTH_LONG)
                                     mUseCurrentLocationButton.text = getString(R.string.loc_in_use)
                                     // Set the location icon to the filled-in one to denote location being used.
                                     // Source: https://stackoverflow.com/questions/4502605/how-to-programmatically-set-drawableleft-on-android-button
@@ -303,15 +253,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 }
                             }
                         } else {
-                            Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG).show()
+                            makeToast(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                         }
                     } catch (e: IOException) {
-                        println(e)
-                        Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG).show()
+                        Log.e("LOC_ERR", e.toString())
+                        makeToast(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                     }
 
                 } else {
-                    Toast.makeText(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG).show()
+                    makeToast(this, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                 }
             }
         } else {
@@ -321,7 +271,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showPermissionDialog() {
         // This dialog shows when the user presses the "Use My Current Location" button but
-        // has not granted the app location permissions
+        // has not granted the app location permissions.
+        // Adapted from the midterm assessment
         AlertDialog.Builder(this)
                 .setTitle("Welcome to Block Assessment Survey")
                 .setMessage(R.string.need_cur_loc)
@@ -332,5 +283,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                 }
                 .show()
+    }
+
+    private fun makeToast(context: Context, text: CharSequence, duration: Int) {
+        val toast = Toast.makeText(context, text, duration)
+        mToasts.add(toast)
+        toast.show()
+    }
+
+    private fun cancelToasts() {
+        // Hide any Toasts still active so they don't interfere with the next activity.
+        for (t in mToasts) {
+            t.cancel()
+        }
+
+        mToasts.clear()
     }
 }

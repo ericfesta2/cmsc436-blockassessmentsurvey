@@ -24,7 +24,6 @@
     <string name="loc_empty">Please provide a street name, city name, and state to proceed.</string>
     <string name="loc_not_found">Unable to get your current location. Please enter it manually.</string>
     <string name="no_comments_ind">No comments. You can add one by reviewing this block.</string>
-    <string name="api_key">AIzaSyCT2cGpBggM_UiAExYwJUB2LQH-AkwphP4</string>
 
     <!-- ViewReviewsActivity -->
     <string name="has_reviewed">You have already reviewed this location.</string>
