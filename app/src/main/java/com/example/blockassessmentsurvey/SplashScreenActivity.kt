@@ -20,6 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
+        // Go to MainActivity if already logged in, LoginRegisterActivity otherwise
         val intent =
             Intent(this, if (mAuth.currentUser != null)
                 MainActivity::class.java

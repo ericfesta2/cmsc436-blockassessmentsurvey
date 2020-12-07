@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     // True when the user has granted the app at least one location permission.
     private var hasLocationPermission = false
+    private var hasDeniedPermission = false
 
     companion object {
         const val LOCATION_REQUEST_CODE = 200
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         mUseCurrentLocationButton.setOnClickListener {
             // When the user presses the "Use My Current Location" link, update the UI with either
             // their location data (if possible) or a dialog requesting location permissions.
+            checkPermissions()
             updateUIWithLocationData()
         }
 
@@ -131,7 +133,9 @@ class MainActivity : AppCompatActivity() {
 
                 hasLocationPermission = hasPermission
 
-                updateUIWithLocationData()
+                if (hasPermission) {
+                    updateUIWithLocationData()
+                }
             }
         }
     }
@@ -204,8 +208,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUIWithLocationData() {
-        checkPermissions()
-
         if (hasLocationPermission) {
             getCurrentLocation {
                 if (mLocation != null) {
