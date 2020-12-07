@@ -5,20 +5,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.lang.Exception
 
 class CommentsActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
-    private val reviewList = mutableListOf<Review>()
+    private lateinit var mDbRef: DatabaseReference
     private lateinit var mCommentsList: ListView
+    private lateinit var mProgressBar: ProgressBar
+
+    // The list of reviews, added to when reading from Firebase
+    private val reviewList = mutableListOf<Review>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,7 @@ class CommentsActivity : AppCompatActivity() {
             toLoginActivity()
         }
 
+        mProgressBar = findViewById(R.id.progressBar)
         mCommentsList = findViewById(R.id.reviewsList)
 
         val state = intent.getStringExtra("State")
@@ -54,10 +58,15 @@ class CommentsActivity : AppCompatActivity() {
         val path = "$state/$city/$street"
 
         val database = FirebaseDatabase.getInstance()
-        val ref = database.getReference(path)
+        mDbRef = database.getReference(path)
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Get the review data, and extract the comments.
         // Adapted from Lab 7 - Firebase
-        ref.addValueEventListener(object : ValueEventListener {
+        mDbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 reviewList.clear()
 
@@ -83,9 +92,12 @@ class CommentsActivity : AppCompatActivity() {
                     val noCommentsFooter = layoutInflater.inflate(R.layout.no_comments_footer, mCommentsList, false)
                     mCommentsList.addFooterView(noCommentsFooter)
                 }
+
+                mProgressBar.visibility = View.GONE
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                mProgressBar.visibility = View.GONE
                 Toast.makeText(this@CommentsActivity, getString(R.string.comments_fetch_failed), Toast.LENGTH_LONG).show()
             }
         })

@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
@@ -19,12 +16,14 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ViewReviewsActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var mDbRef: DatabaseReference
     private lateinit var mContentLayout: LinearLayout
     private lateinit var mLayoutInflater: LayoutInflater
     private lateinit var mViewIds: MutableMap<String, Pair<Int, Int>>
     private lateinit var mRatingCounts: MutableMap<String, Pair<Long, Double>>
     private lateinit var mAddReviewButton: FloatingActionButton
     private lateinit var mHasReviewedTxt: TextView
+    private lateinit var mProgressBar: ProgressBar
 
     private var hasReviewedBlock = false
 
@@ -34,6 +33,8 @@ class ViewReviewsActivity : AppCompatActivity() {
         title = "Reviews"
 
         mAuth = FirebaseAuth.getInstance()
+        // ProgressBar: https://developer.android.com/reference/android/widget/ProgressBar
+        mProgressBar = findViewById(R.id.progressBar)
 
         // If the user is not logged in, return to the login screen since they must be logged in at this point
         // Adapted from https://firebase.google.com/docs/auth/android/manage-users#kotlin+ktx
@@ -63,6 +64,9 @@ class ViewReviewsActivity : AppCompatActivity() {
         mRatingCounts = mutableMapOf()
         mHasReviewedTxt = findViewById(R.id.hasReviewedTxt)
         mAddReviewButton = findViewById(R.id.addReviewButton)
+        // Hide the Add Review button while the data is gathered.
+        // That way, no one can exploit the system to review a location twice.
+        mAddReviewButton.visibility = View.GONE
 
         val mBlockNameText = findViewById<TextView>(R.id.blockName)
         mBlockNameText.text = street
@@ -70,7 +74,7 @@ class ViewReviewsActivity : AppCompatActivity() {
         val path = "$state/$city/$street"
 
         val database = FirebaseDatabase.getInstance()
-        val ref = database.getReference(path)
+        mDbRef = database.getReference(path)
 
         findViewById<FloatingActionButton>(R.id.addReviewButton).setOnClickListener {
             val intent = Intent(this, ReviewActivity::class.java)
@@ -115,10 +119,14 @@ class ViewReviewsActivity : AppCompatActivity() {
 
             mContentLayout.addView(view)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         // Read the Firebase data from the given location (if any) and update the UI accordingly.
         // Adapted from Lab 7 - Firebase
-        ref.addValueEventListener(object : ValueEventListener {
+        mDbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 mRatingCounts.clear()
                 hasReviewedBlock = false
@@ -138,7 +146,7 @@ class ViewReviewsActivity : AppCompatActivity() {
                                 mRatingCounts[k] = 1L to v.toDouble()
                             } else {
                                 mRatingCounts[k] =
-                                    mRatingCounts[k]!!.first + 1 to mRatingCounts[k]!!.second + v
+                                        mRatingCounts[k]!!.first + 1 to mRatingCounts[k]!!.second + v
                             }
 
                             if (review.reviewer == mAuth.uid) {
@@ -149,9 +157,9 @@ class ViewReviewsActivity : AppCompatActivity() {
                         for ((k, v) in mRatingCounts) {
                             if (v.first > 0) {
                                 findViewById<RatingBar>(mViewIds[k]!!.first).rating =
-                                    (v.second / v.first).toFloat()
+                                        (v.second / v.first).toFloat()
                                 findViewById<TextView>(mViewIds[k]!!.second).text =
-                                    "${v.first} Rating${if (v.first > 1) "s" else ""}"
+                                        "${v.first} Rating${if (v.first > 1) "s" else ""}"
                             }
                         }
                     } catch (e: Exception) {
@@ -161,9 +169,12 @@ class ViewReviewsActivity : AppCompatActivity() {
                         toggleAddReviewBtn()
                     }
                 }
+
+                mProgressBar.visibility = View.GONE
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                mProgressBar.visibility = View.GONE
                 Toast.makeText(this@ViewReviewsActivity, getString(R.string.review_fetch_failed), Toast.LENGTH_LONG).show()
             }
         })

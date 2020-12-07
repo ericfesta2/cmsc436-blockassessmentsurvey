@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     // Keep the references to Toasts so that they can be hidden when leaving the activity
     private lateinit var mToasts: MutableList<Toast>
 
-    // True when the user has granted the app at least one location permission
+    // True when the user has granted the app at least one location permission.
     private var hasLocationPermission = false
 
     companion object {
@@ -74,10 +74,12 @@ class MainActivity : AppCompatActivity() {
             updateUIWithLocationData()
         }
 
+        // Populate the Spinner with state names.
+        // https://developer.android.com/guide/topics/ui/controls/spinner
         val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, states)
-        // Set layout to use when the list of choices appear
+        // Set layout to use when the list of choices appear.
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Set Adapter to Spinner
+        // Set Adapter to Spinner.
         mStateSpinner.adapter = aa
 
         mSeeReviewsButton.setOnClickListener {
@@ -91,6 +93,9 @@ class MainActivity : AppCompatActivity() {
             if (street.isEmpty() || city.isEmpty() || state.isEmpty()) {
                 makeToast(this, getString(R.string.loc_empty), Toast.LENGTH_LONG)
             } else {
+                // If the address is valid and non-empty, go to ViewReviewsActivity with the address data.
+                // ViewReviewsActivity shows the reviews for the specified location (if any)
+                // and prompts the user to add a review or view comments about that location.
                 val intent = Intent(this, ViewReviewsActivity::class.java)
                 intent.putExtra("State", mStateSpinner.selectedItem.toString())
                 intent.putExtra("City", mCityName.text.toString())
@@ -105,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // Remove any background location updates when the user is about to leave MainActivity
+        // Remove any background location updates when the user is about to leave MainActivity.
         mFusedLocationClient.removeLocationUpdates(LocationCallback())
         cancelToasts()
     }
@@ -119,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 var hasPermission = true
 
                 // grantResults should have the results of asking for both coarse and fine location.
-                // If either one is granted, the permission is considered granted
+                // If either one is granted, the permission is considered granted.
                 for (r in grantResults) {
                     hasPermission = hasPermission || r == 1
                 }
@@ -161,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermissions() {
         // Refreshes whether or not the user has granted the app location permissions.
-        // This may change any time throughout the user's interaction with the app, so this is called in various parts of MainActivity for extra verification
+        // This may change any time throughout the user's interaction with the app, so this is called in various parts of MainActivity for extra verification.
         // Adapted from Lab 11 - Location and Android Studio autocomplete
         hasLocationPermission = !(
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -182,10 +187,13 @@ class MainActivity : AppCompatActivity() {
         if (hasLocationPermission) {
             // Adapted from https://developer.android.com/training/location/retrieve-current.html
             // Android Studio marks the line below as red, as it does not see an explicit permission request around it,
-            // but the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that
+            // but the hasLocationPermission variable in conjunction with checkPermissions is equivalent to that.
             mFusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
+                            // Get the location if possible.
+                            // The Android emulator will always return the coordinates of Google headquarters (Amphitheatre Parkway, Mountain View, CA),
+                            // but on a real device this will get the user's actual location.
                             mLocation = location
                             callback()
                         } else {
@@ -195,13 +203,13 @@ class MainActivity : AppCompatActivity() {
                             val locationRequest = LocationRequest.create()
                             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                             locationRequest.interval = 1000
-                            // One request should be enough to obtain the location; more than that at a repeated interval could be superfluous and battery-draining
+                            // One request should be enough to obtain the location; more than that at a repeated interval could be superfluous and battery-draining.
                             locationRequest.numUpdates = 1
 
                             val locationCallback = object : LocationCallback() {
                                 override fun onLocationResult(locationResult: LocationResult) {
                                     // Once the FusedLocationProviderClient has received location data upon the app's request,
-                                    // update the UI accordingly if there is non-null location data
+                                    // update the UI accordingly if there is non-null location data.
                                     for (altLocation in locationResult.locations) {
                                         if (altLocation != null) {
                                             mLocation = altLocation
@@ -210,6 +218,7 @@ class MainActivity : AppCompatActivity() {
                                     }
 
                                     if (mLocation == null) {
+                                        // If the user's location still cannot be obtained, give up and prompt the user to input it manually.
                                         makeToast(this@MainActivity, getString(R.string.loc_not_found), Toast.LENGTH_LONG)
                                     }
                                 }
