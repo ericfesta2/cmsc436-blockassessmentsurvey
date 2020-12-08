@@ -3,7 +3,6 @@ package com.example.blockassessmentsurvey
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.Range
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,9 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.lang.Exception
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 class CommentsActivity : AppCompatActivity() {
@@ -27,6 +24,7 @@ class CommentsActivity : AppCompatActivity() {
 
     // The list of reviews, added to when reading from Firebase
     private val reviewList = mutableListOf<Review>()
+    private val mDateFormatter = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,12 +86,14 @@ class CommentsActivity : AppCompatActivity() {
                         Log.i("View Comments", e.toString())
                     }
                 }
-                val dF = SimpleDateFormat("E M dd HH:mm:ss z Y", Locale.ENGLISH)
 
                 try {
-                    reviewList.sortByDescending { dF.parse(it.posted) }
-                } catch (e :Exception) {
-
+                    // Sort the comments in descending order by their timestamps.
+                    // Timestamps are stored as date strings, so use the SimpleDateFormatter to
+                    // parse them as timestamps for easier sorting comparisons
+                    reviewList.sortByDescending { mDateFormatter.parse(it.posted) }
+                } catch (e: Exception) {
+                    Log.e("Date Sorting", e.toString())
                 }
 
                 update()
