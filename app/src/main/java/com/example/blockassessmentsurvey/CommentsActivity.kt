@@ -3,6 +3,7 @@ package com.example.blockassessmentsurvey
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Range
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.lang.Exception
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 
 class CommentsActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -82,6 +87,13 @@ class CommentsActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                         Log.i("View Comments", e.toString())
                     }
+                }
+                val dF = SimpleDateFormat("E M dd HH:mm:ss z Y", Locale.ENGLISH)
+
+                try {
+                    reviewList.sortByDescending { dF.parse(it.posted) }
+                } catch (e :Exception) {
+
                 }
 
                 update()
